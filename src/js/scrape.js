@@ -85,70 +85,45 @@ var j = schedule.scheduleJob('*/5 * * * * *', function() {
       newarr = []
       newobj = {}
 
-      // COUNTER TEST ///
+      // COUNTER //
 
-
-      // var count = db.ref('test/count');
-      // count.transaction(function(currentRank) {
-      //   // If users/ada/rank has never been set, currentRank will be `null`.
-      //   return currentRank + 1;
-      // });
-      
-      var countArray = ["ytd", "month", "week"]
+      var countArray = ['ytd', 'month', 'week']
       for (var xx = 0; xx < listArray02.length; xx++) {
         for (var yy = 0; yy < countArray.length; yy++) {
-          var countTest = db.ref('color_data/' + listArray02[xx] + '/' + countArray[yy]).transaction(function(count) {
-            return count + 1
-          })
+          var countTest = db
+            .ref('color_data/' + listArray02[xx] + '/' + countArray[yy])
+            .transaction(function(count) {
+              return count + 1
+            })
         }
-
-
-
-
-
       }
 
-      
-
-
-
-
-
-
-
-
-      // END COUNTER TEST ///
-
-
+      // END COUNTER //
 
       // PUSH EACH COLOR TO FIREBASE //
       for (var c = 0; c < listArray02.length; c++) {
-
         var adate = moment().format()
-        var colorData = db.ref('color_data/' + listArray02[c]).push({iso: adate})
+        var colorData = db
+          .ref('color_data/' + listArray02[c])
+          .push({ iso: adate })
         var dateKey = colorData.key
-        colorRef = db.ref('today').set({color: listArray02[c], date: todayLong})
+        colorRef = db
+          .ref('today')
+          .set({ color: listArray02[c], date: todayLong })
       }
-      var newobj = {date: {iso: moment().format()}}
-        var colorObj = {}
-          listArray02.forEach(function(data) {
-            color: newobj[data] = data
-          })
-        
-        colorRef = db.ref('today/colors').push(newobj)
+      var newobj = { date: { iso: moment().format() } }
+      var colorObj = {}
+      listArray02.forEach(function(data) {
+        color: newobj[data] = data
+      })
 
-      
-        
-
-
-
-
+      colorRef = db.ref('today/colors').push(newobj)
 
       // CONVERT ARRAY TO OBJECT //
-            var obj = {}
-            listArray02.forEach(function(data) {
-              obj[data] = data
-            })
+      var obj = {}
+      listArray02.forEach(function(data) {
+        obj[data] = data
+      })
       // SET DAILY OBJECT //
       var dailyObj = {
         date: today,
@@ -158,14 +133,9 @@ var j = schedule.scheduleJob('*/5 * * * * *', function() {
         colors: obj
       }
 
-
-
       // PUSH TO FIREBASE //
       //// ref.push(dailyObj)
       console.log(dailyObj)
-      
-
-
 
       // WRITE DAILYOBJ TO JSON FILE //
       require('fs').writeFile(
